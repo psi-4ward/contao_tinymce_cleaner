@@ -81,7 +81,7 @@ class TinyMceCleaner extends Controller
 
 		// check if we have allowed tags, if not skip the striping
 		if ($strTags != '')
-		{die($strTags);
+		{
 			return strip_tags($varValue, $strTags);
 		}
 
