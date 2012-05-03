@@ -53,9 +53,9 @@ class TinyMceCleaner extends Controller
 			if (is_array($arrDcaFields))
 			{
 				// check every field if there is a TinyMCE config
-				foreach ($arrDcaFields as $v) // must be an array
+				foreach ($arrDcaFields as $v)
 				{
-					// is there is a TinyMCE config, add the cleanup callback
+					// if there is a TinyMCE config, add the cleanup callback
 					if ($v['eval']['rte'] != '')
 					{
 						$v['save_callback'][] = array('TinyMceCleaner', 'cleanHtmlCode');
@@ -131,15 +131,12 @@ class TinyMceCleaner extends Controller
 			// glue all tags together
 			while ($objUserGroupTags->next())
 			{
-				$strTags .= $objUserGroupTags->tinymce_cleaner_tags;
+				$strTags .= ','. $objUserGroupTags->tinymce_cleaner_tags;
 			}
 
 			$this->getTagsFromString($strTags, &$arrTags);
 		}
 
-
-
-		$arrTags = array_unique($arrTags);
 
 		// get all tags witch sould be removed from the whitelist
 		foreach ($arrTags as $t)
@@ -176,11 +173,14 @@ class TinyMceCleaner extends Controller
 	 */
 	protected function getTagsFromString($strTags, $arrTags)
 	{
-		$arrChunks = trimsplit(',', $strTags);
-		$arrChunks = array_unique($arrChunks);
+		// get all tags from the string
+		$arrChunks = (array) trimsplit(',', $strTags);
 
 		// add all new tags to the reference of $arrTags
 		$arrTags = array_merge($arrTags, $arrChunks);
+
+		// remove all dublicate entry's
+		$arrTags = array_unique($arrTags);
 	}
 }
 
